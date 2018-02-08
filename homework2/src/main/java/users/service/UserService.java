@@ -1,7 +1,7 @@
 package users.service;
 
-import org.springframework.stereotype.Service;
 import users.dto.UserDTO;
+import users.exceptions.UserNotFoundException;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +12,6 @@ public interface UserService {
 
     void deleteUser(UUID userId);
 
-    UserDTO findByEmail(String email);
+    UserDTO findByEmail(String email) throws UserNotFoundException;
 
 }

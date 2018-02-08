@@ -18,12 +18,22 @@ public class User {
     private String email;
     private String password;
 
-    public User(String firstName, String lastName, Date birthday, String email, String password){
+    public User(UUID id, String firstName, String lastName, Date birthday, String email, String password){
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
         this.email = email;
         this.password = password; ////TODO
     }
+
+    public User(String firstName, String lastName, Date birthday, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
+        this.email = email;
+        this.password = password;
+    }
+
     public User(){}
 }

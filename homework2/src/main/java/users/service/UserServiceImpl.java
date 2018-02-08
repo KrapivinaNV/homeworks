@@ -1,10 +1,12 @@
 package users.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import users.dto.UserDTO;
+import users.exceptions.UserNotFoundException;
 import users.model.User;
 import users.repositories.UserRepository;
+import users.service.exceptions.NoUserIdFoundException;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,10 +28,21 @@ class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(UUID userId) {
-
+        try {
+            userRepository.delete(userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoUserIdFoundException();
+        }
     }
 
-    public UserDTO findByEmail(String email) {
-        return null;
+    public UserDTO findByEmail(String email) throws UserNotFoundException {
+
+        User userFound = userRepository.getByEmail(email);
+        if (null == userFound) {
+            throw new UserNotFoundException();
+        }
+
+        return UserDTO.fromUser(userFound);
     }
+
 }

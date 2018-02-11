@@ -2,7 +2,7 @@ package users.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import users.dto.UserDTO;
+import users.dto.UserResponse;
 import users.exceptions.UserNotFoundException;
 import users.model.User;
 import users.repositories.UserRepository;
@@ -35,14 +35,14 @@ class UserServiceImpl implements UserService {
         }
     }
 
-    public UserDTO findByEmail(String email) throws UserNotFoundException {
+    public UserResponse findByEmail(String email) throws UserNotFoundException {
 
         User userFound = userRepository.getByEmail(email);
         if (null == userFound) {
             throw new UserNotFoundException();
         }
 
-        return UserDTO.fromUser(userFound);
+        return UserResponse.fromUser(userFound);
     }
 
 }

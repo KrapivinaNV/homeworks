@@ -7,19 +7,16 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class UserDTO {
-
-   // private UUID uuid;
+public class UserRequest {
     private String firstName;
     private String lastName;
     private Date birthday;
     private String email;
     private String password;
 
-    public UserDTO(){}
+    public UserRequest(){}
 
-    public UserDTO(UUID uuid, String firstName, String lastName, Date birthday, String email, String password) {
-      //  this.uuid = uuid;
+    public UserRequest(String firstName, String lastName, Date birthday, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
@@ -27,9 +24,8 @@ public class UserDTO {
         this.password = password;
     }
 
-    public static UserDTO fromUser(User user) {
-        return new UserDTO(
-                user.getId(),
+    public static UserRequest fromUser(User user) {
+        return new UserRequest(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getBirthday(),

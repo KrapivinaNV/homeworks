@@ -1,6 +1,7 @@
 package users.service;
 
-import users.dto.UserDTO;
+import users.dto.UserRequest;
+import users.dto.UserResponse;
 import users.exceptions.UserNotFoundException;
 
 import java.util.Date;
@@ -12,6 +13,6 @@ public interface UserService {
 
     void deleteUser(UUID userId);
 
-    UserDTO findByEmail(String email) throws UserNotFoundException;
+    UserResponse findByEmail(String email) throws UserNotFoundException;
 
 }

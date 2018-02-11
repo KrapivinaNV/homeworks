@@ -1,8 +1,10 @@
 package users.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import users.dto.UserDTO;
+import users.dto.UserRequest;
+import users.dto.UserResponse;
 import users.error.Error;
 import users.error.ErrorCode;
 import users.exception.UserNotFoundException;
@@ -15,16 +17,21 @@ import java.util.UUID;
 public class OnlineController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public OnlineController(UserService userService) {
+    public OnlineController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
+
+
     @RequestMapping(method = RequestMethod.PUT, path = "/users")
-    public Response addUser(@RequestBody UserDTO userDTO, HttpServletResponse response) {
+    public Response addUser(@RequestBody UserRequest userDTO, HttpServletResponse response) {
         try {
-            UUID uuid = userService.addUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getBirthday(), userDTO.getEmail(), userDTO.getPassword());
+            String encodePassword = passwordEncoder.encode(userDTO.getPassword());
+            UUID uuid = userService.addUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getBirthday(), userDTO.getEmail(), encodePassword);
             return new Response<>(uuid);
         } catch (Exception e) {
             Error error = new Error(ErrorCode.OTHER, "an error has occurred during user creation");
@@ -53,8 +60,12 @@ public class OnlineController {
     @RequestMapping(method = RequestMethod.GET, path = "/users/{email}")
     public Response findUserByEmail(@PathVariable(name = "email") String email, HttpServletResponse response) {
         try {
-            UserDTO byEmail = userService.findByEmail(email);
+            UserResponse byEmail = userService.findByEmail(email);
             return new Response<>(byEmail);
+        } catch (UserNotFoundException e) {
+            Error error = new Error(ErrorCode.USER_NOT_FOUND, "an error has occurred during user getting");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new Response<>(error);
         } catch (Exception e) {
             Error error = new Error(ErrorCode.OTHER, "an error has occurred during user getting");
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -1,6 +1,7 @@
 package users.model;
 
 import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.UUID;
 @Data
 @Entity
 public class User {
+
     @Id
     private UUID id;
 
@@ -18,13 +20,16 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+    }
+
     public User(UUID id, String firstName, String lastName, Date birthday, String email, String password){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
         this.email = email;
-        this.password = password; ////TODO
+        this.password = password;
     }
 
     public User(String firstName, String lastName, Date birthday, String email, String password) {
@@ -34,6 +39,4 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
-    public User(){}
 }

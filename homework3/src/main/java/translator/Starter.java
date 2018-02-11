@@ -2,8 +2,8 @@ package translator;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 import translator.service.Translator;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;

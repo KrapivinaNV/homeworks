@@ -5,6 +5,7 @@ import users.dto.UserResponse;
 import users.exceptions.UserNotFoundException;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -13,6 +14,6 @@ public interface UserService {
 
     void deleteUser(UUID userId);
 
-    UserResponse findByEmail(String email) throws UserNotFoundException;
+    List<UserResponse> findByEmail(String email) throws UserNotFoundException;
 
 }

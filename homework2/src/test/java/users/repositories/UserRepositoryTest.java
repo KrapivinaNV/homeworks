@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+import users.dto.UserResponse;
 import users.model.User;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -36,10 +38,8 @@ public class UserRepositoryTest {
                         "")
         );
 
-        User user = userRepository.getByEmail("TestUser@gmail.com");
+        List<User> byEmail = userRepository.getAllUsersByEmail("TestUser1@gmail.com");
 
-        assertEquals(user.getId(), uuid);
+        assertEquals(byEmail.get(0).getId(), uuid);
     }
-
-
 }

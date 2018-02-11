@@ -4,55 +4,52 @@ import java.util.*;
 
 public class Main {
 
-    private static Queue<Integer> numbers = new PriorityQueue<>(new Comparator<Integer>() {
-        public int compare(Integer o1, Integer o2) {
-            return o1.compareTo(o2);
-        }
-    });
+    private static final int DELAY = 2000;
+    private static final int PERIOD = 10000;
 
-    static final Object monitor = new Object();
+    private static Queue<Integer> numbers = new PriorityQueue<>(Integer::compareTo);
+
+    private static final Object MONITOR = new Object();
 
     public static void main(String[] args) {
-        Thread scannerThread = new Thread(new Runnable() {
-            public void run() {
-                String s = "";
-                while (true) {
-                    Scanner in = new Scanner(System.in);
-                    s = in.nextLine();
+        Thread scannerThread = new Thread(() -> {
+            String word;
+            while (true) {
+                Scanner in = new Scanner(System.in);
+                word = in.nextLine();
 
-                    if (s.equals("exit")) {
-                        return;
-                    }
-                    synchronized (monitor) {
-                        try {
-                            numbers.add(numbersFromString(s));
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid word!");
-                        }
+                if (word.equals("exit")) {
+                    return;
+                }
+                synchronized (MONITOR) {
+                    try {
+                        numbers.add(numbersFromString(word));
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid word!");
                     }
                 }
             }
         });
         scannerThread.start();
 
-
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                synchronized (monitor) {
-                    if (!numbers.isEmpty()) {
-                        Integer poll = numbers.poll();
-                        System.out.println("min number:" + poll);
-                    }
-                }
-            }
-        }, 2000, 10000);
+                           @Override
+                           public void run() {
+                               synchronized (MONITOR) {
+                                   if (!numbers.isEmpty()) {
+                                       Integer poll = numbers.poll();
+                                       System.out.println("min number:" + poll);
+                                   }
+                               }
+                           }
+                       },
+                DELAY,
+                PERIOD
+        );
     }
 
-
-    public static Integer numbersFromString(String input) throws IllegalArgumentException {
-        boolean isValidInput = true;
+    private static Integer numbersFromString(String input) throws IllegalArgumentException {
         Integer result = 0;
         Integer finalResult = 0;
         List<String> allowedStrings = Arrays.asList
@@ -64,7 +61,6 @@ public class Main {
                         "hundred", "thousand"
                 );
 
-
         if (input != null && input.length() > 0) {
             input = input.replaceAll("-", " ");
             input = input.toLowerCase().replaceAll(" and", " ");
@@ -72,7 +68,6 @@ public class Main {
 
             for (String str : splittedParts) {
                 if (!allowedStrings.contains(str)) {
-                    isValidInput = false;
                     throw new IllegalArgumentException();
                 }
             }

@@ -6,9 +6,10 @@ import users.dto.UserResponse;
 import users.exceptions.UserNotFoundException;
 import users.model.User;
 import users.repositories.UserRepository;
-import users.service.exceptions.NoUserIdFoundException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,18 +32,21 @@ class UserServiceImpl implements UserService {
         try {
             userRepository.delete(userId);
         } catch (EmptyResultDataAccessException e) {
-            throw new NoUserIdFoundException();
-        }
-    }
-
-    public UserResponse findByEmail(String email) throws UserNotFoundException {
-
-        User userFound = userRepository.getByEmail(email);
-        if (null == userFound) {
             throw new UserNotFoundException();
         }
-
-        return UserResponse.fromUser(userFound);
     }
 
+    public List<UserResponse> findByEmail(String email) throws UserNotFoundException {
+
+        List<User> usersFound = userRepository.getAllUsersByEmail(email);
+        if (usersFound.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        ArrayList<UserResponse> userResponses = new ArrayList<>();
+        for (User user:usersFound) {
+            userResponses.add(UserResponse.fromUser(user));
+        }
+
+        return userResponses;
+    }
 }

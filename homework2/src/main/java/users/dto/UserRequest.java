@@ -1,10 +1,8 @@
 package users.dto;
 
 import lombok.Data;
-import users.model.User;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Data
 public class UserRequest {
@@ -22,15 +20,5 @@ public class UserRequest {
         this.birthday = birthday;
         this.email = email;
         this.password = password;
-    }
-
-    public static UserRequest fromUser(User user) {
-        return new UserRequest(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getBirthday(),
-                user.getEmail(),
-                user.getPassword()
-        );
     }
 }
